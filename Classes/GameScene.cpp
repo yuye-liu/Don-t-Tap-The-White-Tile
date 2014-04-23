@@ -168,7 +168,24 @@ void GameScene::gameOver2()
 
     isTouchLock = true;
     stopAllGameColorButtonSchedule();
-    AllGameColorButtonMoveBy(Point(0.0f,missedRect->getContentSize().height*2),0.5f,0.5f);
+    
+    int topLineNum = bottomLineVerticalNum;
+    for (int i = 0; i<5; i++)
+    {
+        topLineNum --;
+        if (topLineNum<0)
+        {
+            topLineNum = 4;
+        }
+    }
+    
+    for (int i = 0; i<4; i++)
+    {
+        GameColorButton * gameColorButton = (GameColorButton * )getChildByTag(topLineNum*4+i);
+        gameColorButton->setPosition(Point(gameColorButton->getPositionX(),VisibleRect::center().y-gameColorButton->getContentSize().height*2));
+    }
+    
+    AllGameColorButtonMoveBy(Point(0.0f,missedRect->getContentSize().height),0.5f,0.5f);
     
     CallFuncN * callFuncN = CallFuncN::create( CC_CALLBACK_1(GameScene::replaceGameOverScene, this, true));
     
