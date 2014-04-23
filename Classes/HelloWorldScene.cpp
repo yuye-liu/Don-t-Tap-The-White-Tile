@@ -139,13 +139,13 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     switch (aItem->getTag())
     {
         case 0:
-            Director::getInstance()->replaceScene( GameOverScene::scene() );
+            //Director::getInstance()->replaceScene( GameOverScene::scene() );
             break;
         case 1:
             //Director::getInstance()->replaceScene( GameOverScene::scene() );
             break;
         case 2:
-            Director::getInstance()->replaceScene( GameOverScene::scene() );
+            //Director::getInstance()->replaceScene( GameOverScene::scene() );
             break;
         case 3:
             //Director::getInstance()->replaceScene( GameOverScene::scene() );

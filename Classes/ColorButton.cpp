@@ -64,7 +64,24 @@ bool ColorButton::onTouchBegan(Touch* touch, Event* event)
     if ( !containsTouchLocation(touch) )return false;
 
     log("%d",this->getTag());
-    
+    switch (this->getTag())
+    {
+        case 0:
+            ;
+            break;
+        case 1:
+            Director::getInstance()->replaceScene( GameScene::scene() );
+            break;
+        case 2:
+            ;
+            break;
+        case 3:
+            ;
+            break;
+            
+        default:
+            break;
+    }
   /*
     auto scene = new GameScene();
     auto layer = Layer::create();
@@ -72,7 +89,7 @@ bool ColorButton::onTouchBegan(Touch* touch, Event* event)
     Director::getInstance()->replaceScene(TransitionFlipX::create(2, scene) );
     scene->release();
     */
-    Director::getInstance()->replaceScene( GameScene::scene() );
+    
     
     return true;
 }
