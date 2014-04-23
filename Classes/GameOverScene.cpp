@@ -38,31 +38,30 @@ bool GameOverScene::init()
     
     titleLabel = LabelTTF::create(titleStr, "Arial", 24*1.5);
     titleLabel->setColor(Color3B(255,255,255));
-    titleLabel->setAnchorPoint(Point(0.5f,0.5f));
     // position the label on the center of the screen
-    titleLabel->setPosition(Point(VisibleRect::center().x,VisibleRect::top().y-60));
+    titleLabel->setPosition(VisibleRect::top()-Point(0,60.0f));
     
     // add the label as a child to this layer
-    layer->addChild(titleLabel, 1);
+    this->addChild(titleLabel, 1);
     
     resultLabel = LabelTTF::create(resultStr, "Arial", 24*4);
     resultLabel->setColor(Color3B(0,0,0));
-    resultLabel->setAnchorPoint(Point(0.5f,0.5f));
+    resultLabel->setAnchorPoint(Point(0.5f,0.0f));
     // position the label on the center of the screen
-    resultLabel->setPosition(VisibleRect::center()+Point(0.0f,30.0f));
+    resultLabel->setPosition(VisibleRect::center());
     
     // add the label as a child to this layer
-    layer->addChild(resultLabel, 1);
+    this->addChild(resultLabel, 1);
     
     auto menu = Menu::create();
     menu->setPosition(Point::ZERO);
-    layer->addChild(menu, 1);
+    this->addChild(menu, 1);
 
     shareItem = MenuItemFont::create("分享",
                                      CC_CALLBACK_1(GameOverScene::share, this));
     shareItem->setFontSizeObj(24);
     shareItem->setColor(Color3B(255,255,255));
-    shareItem->setPosition(VisibleRect::bottom()-Point(100,-100));
+    shareItem->setPosition(VisibleRect::leftBottom()+Point(60,100));
     menu->addChild(shareItem);
     
     backItem = MenuItemFont::create("返回",
@@ -76,7 +75,7 @@ bool GameOverScene::init()
                                     CC_CALLBACK_1(GameOverScene::replay, this));
     replayItem->setFontSizeObj(24);
     replayItem->setColor(Color3B(255,255,255));
-    replayItem->setPosition(VisibleRect::bottom()-Point(-100,-100));
+    replayItem->setPosition(VisibleRect::rightBottom()+Point(-60,100));
     menu->addChild(replayItem);
                            
     return true;

@@ -67,8 +67,10 @@ bool GameScene::init()
             layer->setTag(horizontal+4*vertical);
             gameColorButtonVec.push_back(layer);
             layer->isBlack = isBlack;
+            /*
             Action * MoveBy = MoveBy::create(rectScrollSpeed_macro, Point(0,-VisibleRect::getVisibleRect().size.height*2));
             layer->runAction(MoveBy);
+             */
         }
     }
 
@@ -88,9 +90,8 @@ GameColorButton*  GameScene::createRect(Color4B color4B,int horizontal,int verti
     layer->ignoreAnchorPointForPosition(false);
     layer->setAnchorPoint(Point(0.0f,1.0f));
     layer->setContentSize(size/4);
-    layer->setPosition(Point(size.width/4*horizontal,
-                             size.height+size.height/4-size.height/4*vertical));
-    
+    layer->setPosition(VisibleRect::leftTop()+Point(size.width/4*horizontal,
+                             size.height/4-size.height/4*vertical));
     addChild(layer);
     
     return layer;
@@ -135,13 +136,20 @@ int GameScene::getRandomNumber(int start,int end)
     return CCRANDOM_0_1()*(end+1-start)+start;
 }
 
-void GameScene::AllGameColorButtonMoveBy(const Point& MoveByD)
+void GameScene::AllGameColorButtonMoveBy(const Point& MoveByD,float duration,float rate)
 {
     for(GameColorButton* obj:gameColorButtonVec)
     {
-        MoveBy * moveByD = MoveBy::create(0.5f, MoveByD);
-        EaseIn * easeIn = EaseIn::create(moveByD, 0.5f);
-        obj->runAction(easeIn);
+        MoveBy * moveByD = MoveBy::create(duration, MoveByD);
+        if(0 == rate)
+        {
+            obj->runAction(moveByD);
+        }
+        else
+        {
+            EaseIn * easeIn = EaseIn::create(moveByD, rate);
+            obj->runAction(easeIn);
+        }
     }
 }
 void GameScene::stopAllGameColorButtonSchedule()
@@ -160,7 +168,7 @@ void GameScene::gameOver2()
 
     isTouchLock = true;
     stopAllGameColorButtonSchedule();
-    AllGameColorButtonMoveBy(Point(0.0f,missedRect->getContentSize().height*2));
+    AllGameColorButtonMoveBy(Point(0.0f,missedRect->getContentSize().height*2),0.5f,0.5f);
     
     CallFuncN * callFuncN = CallFuncN::create( CC_CALLBACK_1(GameScene::replaceGameOverScene, this, true));
     

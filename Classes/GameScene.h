@@ -16,6 +16,9 @@ public:
     int  missedGameColorButtonTag;
     bool isTouchLock = false;
     std::vector<int > blackRectTagVec;
+    Vector<int > *a;
+    Vector<GameColorButton * > *b;
+    bool isFirstIn = true;
     
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
     static cocos2d::Scene* scene();
@@ -23,7 +26,7 @@ public:
     
     static std::vector<int > getRandomVect(int start,int end);
     static int getRandomNumber(int start,int end);
-    void AllGameColorButtonMoveBy(const Point& MoveByD);
+    void AllGameColorButtonMoveBy(const Point& MoveByD,float duration,float rate);
     void stopAllGameColorButtonSchedule();
     void gameOver2();
     void replaceGameOverScene(Ref* sender, bool cleanup);

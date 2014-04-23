@@ -75,6 +75,12 @@ Rect GameColorButton::getRect()
 
 bool GameColorButton::onTouchBegan(Touch* touch, Event* event)
 {
+    if (aGameScene->isFirstIn)
+    {
+        aGameScene->isFirstIn = false;
+        aGameScene->AllGameColorButtonMoveBy(Point(0,-VisibleRect::getVisibleRect().size.height*2),rectScrollSpeed_macro,0.0f);
+        return false;
+    }
     if(2 == isBlack)
     {
         return false;

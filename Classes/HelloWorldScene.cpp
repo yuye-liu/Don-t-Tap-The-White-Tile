@@ -85,9 +85,9 @@ ColorButton*  HelloWorld::createRect(Color4B color4B1,Color4B color4B2,int horiz
     ColorButton * layer = ColorButton::createWithColor(color4B1, color4B1);
     layer->setTag(horizontal+vertical*2);
     layer->setAnchorPoint(Point(0.0f,1.0f));
-    layer->ignoreAnchorPointForPosition(true);
+    layer->ignoreAnchorPointForPosition(false);
     layer->setContentSize(rect/2);
-    layer->setPosition(Point(VisibleRect::leftTop().x+rect.width/2*horizontal,VisibleRect::leftTop().y-rect.height*vertical));
+    layer->setPosition(VisibleRect::leftTop()+Point(rect.width/2*horizontal,-rect.height/2*vertical));
     addChild(layer);
     
     return layer;
