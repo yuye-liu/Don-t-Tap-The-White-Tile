@@ -79,11 +79,15 @@ bool HelloWorld::init()
 }
 ColorButton*  HelloWorld::createRect(Color4B color4B1,Color4B color4B2,int horizontal,int vertical)
 {
+    Size rect = VisibleRect::getVisibleRect().size;
+
+    
     ColorButton * layer = ColorButton::createWithColor(color4B1, color4B1);
     layer->setTag(horizontal+vertical*2);
     layer->setAnchorPoint(Point(0.0f,1.0f));
-    layer->setContentSize(VisibleRect::getVisibleRect().size/2);
-    layer->setPosition(Point(VisibleRect::getVisibleRect().size.width/2*horizontal,VisibleRect::getVisibleRect().size.height/2-VisibleRect::getVisibleRect().size.height/2*vertical));
+    layer->ignoreAnchorPointForPosition(true);
+    layer->setContentSize(rect/2);
+    layer->setPosition(Point(VisibleRect::leftTop().x+rect.width/2*horizontal,VisibleRect::leftTop().y-rect.height*vertical));
     addChild(layer);
     
     return layer;
@@ -132,8 +136,24 @@ void HelloWorld::createLastRectLabel(ColorButton* layer,Color3B color3B)
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
     MenuItemFont * aItem = (MenuItemFont *)pSender;
-    log("%d",aItem->getTag());
-     Director::getInstance()->replaceScene( GameOverScene::scene() );
+    switch (aItem->getTag())
+    {
+        case 0:
+            Director::getInstance()->replaceScene( GameOverScene::scene() );
+            break;
+        case 1:
+            //Director::getInstance()->replaceScene( GameOverScene::scene() );
+            break;
+        case 2:
+            Director::getInstance()->replaceScene( GameOverScene::scene() );
+            break;
+        case 3:
+            //Director::getInstance()->replaceScene( GameOverScene::scene() );
+            break;
+            
+        default:
+            break;
+    }
 }
 
 
