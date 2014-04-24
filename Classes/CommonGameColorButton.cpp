@@ -108,7 +108,16 @@ bool CommonGameColorButton::onTouchBegan(Touch* touch, Event* event)
             setStartColor(Color3B(192, 192, 192));
             setEndColor(Color3B(192, 192, 192));
             
-            aCommonGameScene->AllCommonGameColorButtonMoveBy(Point(0.0f,-this->getContentSize().height),0.5f,0.0f);
+            aCommonGameScene->commonGameTotalLine --;
+            if(aCommonGameScene->commonGameTotalLine != -2)
+            {
+                aCommonGameScene->AllCommonGameColorButtonMoveBy(Point(0.0f,-this->getContentSize().height),0.5f,0.0f);
+            }
+            else
+            {
+                aCommonGameScene->AllCommonGameColorButtonMoveBy(Point(0.0f,-this->getContentSize().height*2.5),0.5f,0.0f);
+            }
+            
             clickBlack();
         }
     }
@@ -151,7 +160,7 @@ void CommonGameColorButton::simulationActionUpdate()
 
 void CommonGameColorButton::update(float delta)
 {
-    if(getPositionY()<VisibleRect::bottom().y)
+    if(getPositionY()<VisibleRect::bottom().y && 0<aCommonGameScene->commonGameTotalLine)
     {
         setPosition(Point(getPositionX(),VisibleRect::top().y+screenHeight/4));
         if(CommonGameScene::getRandomNumber(0,1) == 0 && !aCommonGameScene->isSettedWhiteRect)

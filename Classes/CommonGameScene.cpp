@@ -36,6 +36,10 @@ bool CommonGameScene::init()
     CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(clickWhiteEffect_macro);
     CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(clickBlackEffect_macro);
     
+    LayerGradient * bgLayer = LayerGradient::create(Color4B(0, 255, 0,255), Color4B(0, 255, 0,255));
+    bgLayer->setPosition(VisibleRect::leftBottom());
+    addChild(bgLayer);
+    
     Color4B color4B;
     bool getThisRoundBlackRect = false;
     
@@ -89,6 +93,15 @@ bool CommonGameScene::init()
             layer->isBlack = isBlack;
         }
     }
+    
+    
+    timeLabel = LabelTTF::create("'0.000'", "Arial", TimerSize_macro);
+    timeLabel->setColor(Color3B::RED);
+    timeLabel->setAnchorPoint(Point(0.5f,1.0f));
+    timeLabel->setPosition(VisibleRect::top());
+    this->addChild(timeLabel, 1);
+    
+    scheduleUpdate();
     
     return true;
 }
@@ -236,6 +249,7 @@ void CommonGameScene::OneLinePass()
     countSameLevelRectNum++;
     if(countSameLevelRectNum>3)
     {
+        
         isSettedWhiteRect = false;
         countSameLevelRectNum = 0;
         
@@ -260,4 +274,15 @@ void CommonGameScene::RecordNewUnderBottom_blackRectIndex()
         UnderBottom_bottom_blackRectIndexVec.erase(iter);
         UnderBottom_bottom_blackRectIndexVec.push_back(countSameLevelRectNum);
     }
+}
+void CommonGameScene::update(float delta)
+{
+    timeNum+=0.001;
+    ostringstream oss;
+    oss<<timeNum;
+    string timeStr = oss.str();
+    timeStr = timeStr.substr(0,5);
+    timeStr = "'"+timeStr+"'";
+    const char * time = timeStr.c_str();
+    timeLabel->setString(time);
 }

@@ -19,6 +19,9 @@ public:
     std::vector<int > UnderBottom_bottom_blackRectIndexVec;
     int twoLineCount = 0;
     bool isFirstIn = true;
+    int commonGameTotalLine = totalLine_macro;
+    LabelTTF * timeLabel;
+    float timeNum = 0.000f;
     
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
     static cocos2d::Scene* scene();
@@ -44,6 +47,7 @@ protected:
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
     virtual bool init();
     CommonGameColorButton * createRect(Color4B color4B,int horizontal,int vertical);
+    void update(float delta);
 };
 
 #endif // __CommonGameScene_SCENE_H__
