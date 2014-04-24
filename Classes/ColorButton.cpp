@@ -1,6 +1,7 @@
 #include "ColorButton.h"
 #include "VisibleRect.h"
 #include "GameScene.h"
+#include "CommonGameScene.h"
 
 ColorButton::ColorButton(void)
 {
@@ -63,11 +64,11 @@ bool ColorButton::onTouchBegan(Touch* touch, Event* event)
     
     if ( !containsTouchLocation(touch) )return false;
 
-    log("%d",this->getTag());
+   // log("%d",this->getTag());
     switch (this->getTag())
     {
         case 0:
-            ;
+            Director::getInstance()->replaceScene( CommonGameScene::scene() );
             break;
         case 1:
             Director::getInstance()->replaceScene( GameScene::scene() );
