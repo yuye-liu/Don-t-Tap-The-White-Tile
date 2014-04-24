@@ -1,5 +1,5 @@
 #include "GameColorButton.h"
-#include "VisibleRect.h"
+
 #include "GameOverScene.h"
 #include "Script.h"
 #include "SimpleAudioEngine.h"
@@ -75,6 +75,8 @@ Rect GameColorButton::getRect()
 
 bool GameColorButton::onTouchBegan(Touch* touch, Event* event)
 {
+    if ( !containsTouchLocation(touch) )return false;
+    
     if (aGameScene->isFirstIn)
     {
         aGameScene->isFirstIn = false;
@@ -89,7 +91,6 @@ bool GameColorButton::onTouchBegan(Touch* touch, Event* event)
     {
         return false;
     }
-    if ( !containsTouchLocation(touch) )return false;
     if(0 == isBlack)
     {
         aGameScene->isTouchLock=true;
@@ -102,13 +103,6 @@ bool GameColorButton::onTouchBegan(Touch* touch, Event* event)
     }
     else
     {
-        /*
-        for(int num:aGameScene->blackRectTagVec)
-        {
-            log("kk==%d",num);
-        }
-        log("%d;%d",getTag(),aGameScene->blackRectTagVec[0]);
-         */
         if(getTag() != aGameScene->blackRectTagVec[0])
         {
             aGameScene->gameOver2();
@@ -160,66 +154,49 @@ void GameColorButton::simulationActionUpdate()
 }
 void GameColorButton::update(float delta)
 {
-    if(getPositionY()<0)
+    if(getPositionY()<VisibleRect::bottom().y)
     {
         if (getTag() == aGameScene->blackRectTagVec[0])
         {
             aGameScene->gameOver2();
             return;
         }
+        
+        setPosition(Point(getPositionX(),VisibleRect::top().y+screenHeight/4));
         stopAllActions();
-        
-        int height = VisibleRect::getVisibleRect().size.height;
-        
-        //log("bottomLineVerticalNum:%d,%d",aGameScene->bottomLineVerticalNum,myLevel+1);
-        /*
-        GameColorButton * aObj;
-        if(verticalNum_macro == aGameScene->bottomLineVerticalNum)
-        {
-           aObj = (GameColorButton * )aGameScene->getChildByTag(0);
-        }
-        else
-        {
-            aObj = (GameColorButton * )aGameScene->getChildByTag((myLevel+1)*4);
-        }
-        
-        setPosition(Point(getPositionX(),aObj->getPositionY()+aObj->getContentSize().height-3));
-        */
-        setPosition(Point(getPositionX(),height+height/4));
-        
         if(GameScene::getRandomNumber(0,1) == 0 && !aGameScene->isSettedWhiteRect)
         {
             setStartColor(Color3B(0.0f,0.0f,0.0f));
             setEndColor(Color3B(0.0f,0.0f,0.0f));
             aGameScene->isSettedWhiteRect = true;
-            /*
-            vector<int>::iterator iter = aGameScene->blackRectTagVec.begin();
-            aGameScene->blackRectTagVec.erase(iter);
-            */
+
             aGameScene->blackRectTagVec.push_back(getTag());
             isBlack = 1;
+            aGameScene->RecordNewUnderBottom_blackRectIndex();
         }
         else
         {
+            if(3 == aGameScene->countSameLevelRectNum && !aGameScene->isSettedWhiteRect)
+            {
+                setStartColor(Color3B(0.0f,0.0f,0.0f));
+                setEndColor(Color3B(0.0f,0.0f,0.0f));
+                aGameScene->isSettedWhiteRect = true;
+                
+                aGameScene->blackRectTagVec.push_back(getTag());
+                isBlack = 1;
+                aGameScene->RecordNewUnderBottom_blackRectIndex();
+            }
+            else
+            {
             setStartColor(Color3B(255.0f,255.0f,255.0f));
             setEndColor(Color3B(255.0f,255.0f,255.0f));
             isBlack = 0;
-        }
-        
-        aGameScene->countSameLevelRectNum++;
-        if(aGameScene->countSameLevelRectNum>3)
-        {
-            aGameScene->isSettedWhiteRect = false;
-            aGameScene->countSameLevelRectNum = 0;
-            
-            aGameScene->bottomLineVerticalNum--;
-            if (aGameScene->bottomLineVerticalNum<0)
-            {
-                aGameScene->bottomLineVerticalNum = verticalNum_macro;
             }
         }
         
-        Action * MoveBy = MoveBy::create(rectScrollSpeed_macro, Point(0,-height*2));
+        aGameScene->OneLinePass();
+                
+        Action * MoveBy = MoveBy::create(rectScrollSpeed_macro, Point(0,-screenHeight*2));
         this->runAction(MoveBy);
     }
 }
@@ -231,16 +208,11 @@ void GameColorButton::clickBlack(Ref* sender, bool cleanup)
 {
     vector<int>::iterator iter = aGameScene->blackRectTagVec.begin();
     aGameScene->blackRectTagVec.erase(iter);
-   /*
-    for(int num:aGameScene->blackRectTagVec)
-    {
-        log("%d",num);
-    }
-    */
+  
     aGameScene->currentVerticalNum--;
     if(aGameScene->currentVerticalNum<0)
     {
-        aGameScene->currentVerticalNum = verticalNum_macro;
+        aGameScene->currentVerticalNum = verticalNum_macro-1;
     }
 }
 void GameColorButton::getGameScenePoint(GameScene * gameScene)

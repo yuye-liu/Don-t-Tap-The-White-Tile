@@ -2,6 +2,7 @@
 #define __GameColorButton_H__
 
 #include "cocos2d.h"
+#include "VisibleRect.h"
 USING_NS_CC;
 
 class GameScene;
@@ -17,7 +18,10 @@ public:
 protected:
     DrawNode* rectStroke;
     GameScene * aGameScene;
-
+    
+    const cocos2d::Size screenSize_macro = VisibleRect::getVisibleRect().size;
+    const float screenHeight = VisibleRect::getVisibleRect().size.height;
+    
     GameColorButton(void);
     virtual ~GameColorButton(void);
     virtual void onEnter() override;

@@ -6,6 +6,8 @@
 
 USING_NS_CC;
 using namespace std;
+
+
 Scene* GameScene::scene()
 {
     // 'scene' is an autorelease object
@@ -37,61 +39,69 @@ bool GameScene::init()
     Color4B color4B;
     bool getThisRoundBlackRect = false;
     
-    
-    std::vector<int > tempVec;
-    
-    for (int vertical = 0; vertical<verticalNum_macro+1; vertical++)
+    for (int vertical = 0; vertical<totalVhertical; vertical++)
     {
         getThisRoundBlackRect = false;
-        for (int horizontal=0; horizontal<4; horizontal++)
+        for (int horizontal=0; horizontal<horizontalNum_macro; horizontal++)
         {
             int isBlack;
-            if(getRandomNumber(0,1)==0 && !getThisRoundBlackRect && verticalNum_macro!=vertical)
+            if(getRandomNumber(0,1)==0 && !getThisRoundBlackRect && totalVhertical!=vertical+1)
             {
                 color4B = Color4B(0,0,0,255);
                 getThisRoundBlackRect = true;
-                tempVec.push_back(horizontal+4*vertical);
+                blackRectTagVec.insert(blackRectTagVec.begin(),horizontal+4*vertical);
                 isBlack = 1;
+                
+                if (totalVhertical-3 == vertical ||
+                    totalVhertical-5 == vertical)
+                {
+                    UnderBottom_bottom_blackRectIndexVec.insert(UnderBottom_bottom_blackRectIndexVec.begin(),horizontal);
+                }
             }
-            else if(verticalNum_macro == vertical)
+            else if(totalVhertical == vertical+1)
             {
                 color4B = Color4B(255,215,0,255);
                 isBlack = 2;
             }
             else
             {
-                color4B = Color4B(255,255,255,255);
-                isBlack = 0;
+                if(3 == horizontal && !getThisRoundBlackRect)
+                {
+                    color4B = Color4B(0,0,0,255);
+                    getThisRoundBlackRect = true;
+                    blackRectTagVec.insert(blackRectTagVec.begin(),horizontal+4*vertical);
+                    isBlack = 1;
+
+                    if (totalVhertical-3 == vertical ||
+                        totalVhertical-5 == vertical)
+                    {
+                        UnderBottom_bottom_blackRectIndexVec.insert(UnderBottom_bottom_blackRectIndexVec.begin(),horizontal);
+                    }
+                }
+                else
+                {
+                    color4B = Color4B(255,255,255,255);
+                    isBlack = 0;
+                }
             }
             GameColorButton* layer = createRect(color4B,horizontal,vertical);
-            layer->setTag(horizontal+4*vertical);
-            gameColorButtonVec.push_back(layer);
+            layer->setTag(horizontal+horizontalNum_macro*vertical);
             layer->isBlack = isBlack;
-            /*
-            Action * MoveBy = MoveBy::create(rectScrollSpeed_macro, Point(0,-VisibleRect::getVisibleRect().size.height*2));
-            layer->runAction(MoveBy);
-             */
         }
-    }
-
-    for (int i = 0; i<tempVec.size(); i++)
-    {
-        blackRectTagVec.push_back(tempVec[tempVec.size()-1-i]);
     }
     
     return true;
 }
 GameColorButton*  GameScene::createRect(Color4B color4B,int horizontal,int vertical)
 {
-    Size size = VisibleRect::getVisibleRect().size;
     GameColorButton * layer = GameColorButton::createWithColor(color4B, color4B);
     layer->getGameScenePoint(this);
     layer->myLevel = vertical;
     layer->ignoreAnchorPointForPosition(false);
     layer->setAnchorPoint(Point(0.0f,1.0f));
-    layer->setContentSize(size/4);
-    layer->setPosition(VisibleRect::leftTop()+Point(size.width/4*horizontal,
-                             size.height/4-size.height/4*vertical));
+    layer->setContentSize(screenSize_macro/4);
+    layer->setPosition(VisibleRect::leftTop()+Point(screenSize_macro.width/4*horizontal,
+                             screenSize_macro.height/4-screenSize_macro.height/4*vertical));
     addChild(layer);
     
     return layer;
@@ -138,8 +148,9 @@ int GameScene::getRandomNumber(int start,int end)
 
 void GameScene::AllGameColorButtonMoveBy(const Point& MoveByD,float duration,float rate)
 {
-    for(GameColorButton* obj:gameColorButtonVec)
+    for(int i = 0;i<totalVhertical*horizontalNum_macro;i++)
     {
+        GameColorButton * obj = (GameColorButton * )getChildByTag(i);
         MoveBy * moveByD = MoveBy::create(duration, MoveByD);
         if(0 == rate)
         {
@@ -154,48 +165,99 @@ void GameScene::AllGameColorButtonMoveBy(const Point& MoveByD,float duration,flo
 }
 void GameScene::stopAllGameColorButtonSchedule()
 {
-    for(GameColorButton* obj:gameColorButtonVec)
+    for(int i = 0;i<totalVhertical*horizontalNum_macro;i++)
     {
+        GameColorButton * obj = (GameColorButton * )getChildByTag(i);
         obj->stopAllActions();
         obj->unscheduleAllSelectors();
     }
 }
 void GameScene::gameOver2()
 {
-    GameColorButton* missedRect = (GameColorButton *)getChildByTag(blackRectTagVec[0]);
-    
     CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(clickBlackEffect_macro );
-
+    
+    createFillRect();
+    
+    GameColorButton* missedRect = (GameColorButton *)getChildByTag(blackRectTagVec[0]);
     isTouchLock = true;
     stopAllGameColorButtonSchedule();
-    
-    int topLineNum = bottomLineVerticalNum;
-    for (int i = 0; i<5; i++)
-    {
-        topLineNum --;
-        if (topLineNum<0)
-        {
-            topLineNum = 4;
-        }
-    }
-    
-    for (int i = 0; i<4; i++)
-    {
-        GameColorButton * gameColorButton = (GameColorButton * )getChildByTag(topLineNum*4+i);
-        gameColorButton->setPosition(Point(gameColorButton->getPositionX(),VisibleRect::center().y-gameColorButton->getContentSize().height*2));
-    }
-    
-    AllGameColorButtonMoveBy(Point(0.0f,missedRect->getContentSize().height),0.5f,0.5f);
+ 
+    AllGameColorButtonMoveBy(Point(0.0f,missedRect->getContentSize().height*2),0.5f,0.5f);
     
     CallFuncN * callFuncN = CallFuncN::create( CC_CALLBACK_1(GameScene::replaceGameOverScene, this, true));
     
     TintBy * tint = TintBy::create(0.3f, 192, 192, 192);
-    Repeat * repeat = Repeat::create(tint, 4);
+    Repeat * repeat = Repeat::create(tint, 10);
     
     missedRect->runAction(Sequence::create(repeat,callFuncN,NULL));
+}
+void GameScene::createFillRect()
+{
+    for (int i = 0; i<4; i++)
+    {
+        GameColorButton * gameColorButton = (GameColorButton * )getChildByTag(bottomLineVerticalNum*4+i);
+        gameColorButton->setPosition(Point(gameColorButton->getPositionX(),VisibleRect::top().y+gameColorButton->getContentSize().height));
+    }
+    
+    Color4B color4B;
+    for (int vertical = 0; vertical<2; vertical++)
+    {
+        for (int horizontal=0; horizontal<horizontalNum_macro; horizontal++)
+        {
+            color4B = Color4B(255,255,255,255);
+            if(horizontal == UnderBottom_bottom_blackRectIndexVec[0] && vertical == 0)
+            {
+                color4B = Color4B(0,0,0,255);
+            }
+            else if(horizontal == UnderBottom_bottom_blackRectIndexVec[1] && vertical == 1)
+            {
+                color4B = Color4B(0,0,0,255);
+            }
+            GameColorButton * layer = GameColorButton::createWithColor(color4B, color4B);
+            layer->getGameScenePoint(this);
+            layer->myLevel = totalVhertical;
+            layer->ignoreAnchorPointForPosition(false);
+            layer->setAnchorPoint(Point(0.0f,1.0f));
+            layer->setContentSize(screenSize_macro/4);
+            layer->setPosition(VisibleRect::leftBottom()+Point(screenSize_macro.width/4*horizontal,-screenSize_macro.height/4*vertical));
+            addChild(layer);
+            
+            layer->setTag(horizontal+totalHorizontal*totalVhertical);
+        }
+        totalVhertical++;
+    }
 }
 void GameScene::replaceGameOverScene(Ref* sender, bool cleanup)
 {
     Director::getInstance()->replaceScene( GameOverScene::scene() );
 }
-
+void GameScene::OneLinePass()
+{
+    countSameLevelRectNum++;
+    if(countSameLevelRectNum>3)
+    {
+        isSettedWhiteRect = false;
+        countSameLevelRectNum = 0;
+        
+        bottomLineVerticalNum--;
+        if (bottomLineVerticalNum<0)
+        {
+            bottomLineVerticalNum = totalVhertical-1;
+        }
+        
+        twoLineCount++;
+        if(twoLineCount>1)
+        {
+            twoLineCount = 0;
+        }
+    }
+}
+void GameScene::RecordNewUnderBottom_blackRectIndex()
+{
+    if (1 == twoLineCount)
+    {
+        vector<int>::iterator iter = UnderBottom_bottom_blackRectIndexVec.begin();
+        UnderBottom_bottom_blackRectIndexVec.erase(iter);
+        UnderBottom_bottom_blackRectIndexVec.push_back(countSameLevelRectNum);
+    }
+}
