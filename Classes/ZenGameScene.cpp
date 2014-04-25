@@ -1,6 +1,6 @@
-#include "GameScene.h"
+#include "ZenGameScene.h"
 #include "VisibleRect.h"
-#include "GameColorButton.h"
+#include "ZenGameColorButton.h"
 #include "SimpleAudioEngine.h"
 #include "GameOverScene.h"
 
@@ -8,13 +8,13 @@ USING_NS_CC;
 using namespace std;
 
 
-Scene* GameScene::scene()
+Scene* ZenGameScene::scene()
 {
     // 'scene' is an autorelease object
     auto scene = Scene::create();
     
     // 'layer' is an autorelease object
-    auto layer = GameScene::create();
+    auto layer = ZenGameScene::create();
 
     // add layer as a child to scene
     scene->addChild(layer);
@@ -24,7 +24,7 @@ Scene* GameScene::scene()
 }
 
 // on "init" you need to initialize your instance
-bool GameScene::init()
+bool ZenGameScene::init()
 {
     //////////////////////////////
     // 1. super init first
@@ -35,6 +35,10 @@ bool GameScene::init()
     
     CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(clickWhiteEffect_macro);
     CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect(clickBlackEffect_macro);
+    
+    LayerGradient * bgLayer = LayerGradient::create(Color4B(0, 255, 0,255), Color4B(0, 255, 0,255));
+    bgLayer->setPosition(VisibleRect::leftBottom());
+    addChild(bgLayer);
     
     Color4B color4B;
     bool getThisRoundBlackRect = false;
@@ -84,18 +88,34 @@ bool GameScene::init()
                     isBlack = 0;
                 }
             }
-            GameColorButton* layer = createRect(color4B,horizontal,vertical);
+            ZenGameColorButton* layer = createRect(color4B,horizontal,vertical);
             layer->setTag(horizontal+horizontalNum_macro*vertical);
             layer->isBlack = isBlack;
         }
     }
     
+    timeNum-=0.001;
+    ostringstream oss;
+    oss<<timeNum;
+    string timeStr = oss.str();
+    timeStr = timeStr.substr(0,5);
+    timeStr = "'"+timeStr+"'";
+    const char * time = timeStr.c_str();
+    
+    timeLabel = LabelTTF::create(time, "Arial", TimerSize_macro);
+    timeLabel->setColor(Color3B::RED);
+    timeLabel->setAnchorPoint(Point(0.5f,1.0f));
+    timeLabel->setPosition(VisibleRect::top());
+    this->addChild(timeLabel, 1);
+    
+    scheduleUpdate();
+    
     return true;
 }
-GameColorButton*  GameScene::createRect(Color4B color4B,int horizontal,int vertical)
+ZenGameColorButton*  ZenGameScene::createRect(Color4B color4B,int horizontal,int vertical)
 {
-    GameColorButton * layer = GameColorButton::createWithColor(color4B, color4B);
-    layer->getGameScenePoint(this);
+    ZenGameColorButton * layer = ZenGameColorButton::createWithColor(color4B, color4B);
+    layer->getZenGameScenePoint(this);
     layer->myLevel = vertical;
     layer->ignoreAnchorPointForPosition(false);
     layer->setAnchorPoint(Point(0.0f,1.0f));
@@ -106,7 +126,7 @@ GameColorButton*  GameScene::createRect(Color4B color4B,int horizontal,int verti
     
     return layer;
 }
-vector<int > GameScene::getRandomVect(int start,int end)
+vector<int > ZenGameScene::getRandomVect(int start,int end)
 {
     vector<int > randomVect;
     
@@ -132,7 +152,7 @@ vector<int > GameScene::getRandomVect(int start,int end)
     
     for (int i = 0; i < quantity; i++)
     {
-        int num = GameScene::getRandomNumber(0, end - 1);//在指定范围下产生随机数
+        int num = ZenGameScene::getRandomNumber(0, end - 1);//在指定范围下产生随机数
         output[i] = sequence[num];//将产生的随机数存储
         randomVect[i] = sequence[num];
         sequence[num] = sequence[end-1];//将最后个下标的值填充到随机产生的下标中
@@ -141,16 +161,16 @@ vector<int > GameScene::getRandomVect(int start,int end)
     
     return randomVect;
 }
-int GameScene::getRandomNumber(int start,int end)
+int ZenGameScene::getRandomNumber(int start,int end)
 {
     return CCRANDOM_0_1()*(end+1-start)+start;
 }
 
-void GameScene::AllGameColorButtonMoveBy(const Point& MoveByD,float duration,float rate)
+void ZenGameScene::AllZenGameColorButtonMoveBy(const Point& MoveByD,float duration,float rate)
 {
     for(int i = 0;i<totalVhertical*horizontalNum_macro;i++)
     {
-        GameColorButton * obj = (GameColorButton * )getChildByTag(i);
+        ZenGameColorButton * obj = (ZenGameColorButton * )getChildByTag(i);
         MoveBy * moveByD = MoveBy::create(duration, MoveByD);
         if(0 == rate)
         {
@@ -163,40 +183,40 @@ void GameScene::AllGameColorButtonMoveBy(const Point& MoveByD,float duration,flo
         }
     }
 }
-void GameScene::stopAllGameColorButtonSchedule()
+void ZenGameScene::stopAllZenGameColorButtonSchedule()
 {
     for(int i = 0;i<totalVhertical*horizontalNum_macro;i++)
     {
-        GameColorButton * obj = (GameColorButton * )getChildByTag(i);
+        ZenGameColorButton * obj = (ZenGameColorButton * )getChildByTag(i);
         obj->stopAllActions();
         obj->unscheduleAllSelectors();
     }
 }
-void GameScene::gameOver2()
+void ZenGameScene::ZenGameOver2()
 {
     CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(clickBlackEffect_macro );
     
     createFillRect();
     
-    GameColorButton* missedRect = (GameColorButton *)getChildByTag(blackRectTagVec[0]);
+    ZenGameColorButton* missedRect = (ZenGameColorButton *)getChildByTag(blackRectTagVec[0]);
     isTouchLock = true;
-    stopAllGameColorButtonSchedule();
+    stopAllZenGameColorButtonSchedule();
  
-    AllGameColorButtonMoveBy(Point(0.0f,missedRect->getContentSize().height*2),0.5f,0.5f);
+    AllZenGameColorButtonMoveBy(Point(0.0f,missedRect->getContentSize().height*2),0.5f,0.5f);
     
-    CallFuncN * callFuncN = CallFuncN::create( CC_CALLBACK_1(GameScene::replaceGameOverScene, this, true));
+    CallFuncN * callFuncN = CallFuncN::create( CC_CALLBACK_1(ZenGameScene::replaceZenGameOverScene, this, true));
     
     TintBy * tint = TintBy::create(0.3f, 192, 192, 192);
     Repeat * repeat = Repeat::create(tint, 10);
     
     missedRect->runAction(Sequence::create(repeat,callFuncN,NULL));
 }
-void GameScene::createFillRect()
+void ZenGameScene::createFillRect()
 {
     for (int i = 0; i<4; i++)
     {
-        GameColorButton * gameColorButton = (GameColorButton * )getChildByTag(bottomLineVerticalNum*4+i);
-        gameColorButton->setPosition(Point(gameColorButton->getPositionX(),VisibleRect::top().y+gameColorButton->getContentSize().height));
+        ZenGameColorButton * zenGameColorButton = (ZenGameColorButton * )getChildByTag(bottomLineVerticalNum*4+i);
+        zenGameColorButton->setPosition(Point(zenGameColorButton->getPositionX(),VisibleRect::top().y+zenGameColorButton->getContentSize().height));
     }
     
     Color4B color4B;
@@ -213,8 +233,8 @@ void GameScene::createFillRect()
             {
                 color4B = Color4B(0,0,0,255);
             }
-            GameColorButton * layer = GameColorButton::createWithColor(color4B, color4B);
-            layer->getGameScenePoint(this);
+            ZenGameColorButton * layer = ZenGameColorButton::createWithColor(color4B, color4B);
+            layer->getZenGameScenePoint(this);
             layer->myLevel = totalVhertical;
             layer->ignoreAnchorPointForPosition(false);
             layer->setAnchorPoint(Point(0.0f,1.0f));
@@ -227,18 +247,16 @@ void GameScene::createFillRect()
         totalVhertical++;
     }
 }
-void GameScene::replaceGameOverScene(Ref* sender, bool cleanup)
+void ZenGameScene::replaceZenGameOverScene(Ref* sender, bool cleanup)
 {
-    auto scene =  GameOverScene::scene();
-    auto gameOverScene = (GameOverScene*)scene->getChildByTag(1001);
-    gameOverScene->setUpScene(Color4B(255,0,0,255),"街机模式","失败!",Street_enum);
-    Director::getInstance()->replaceScene(scene);
+    Director::getInstance()->replaceScene( GameOverScene::scene() );
 }
-void GameScene::OneLinePass()
+void ZenGameScene::OneLinePass()
 {
     countSameLevelRectNum++;
     if(countSameLevelRectNum>3)
     {
+        
         isSettedWhiteRect = false;
         countSameLevelRectNum = 0;
         
@@ -255,12 +273,30 @@ void GameScene::OneLinePass()
         }
     }
 }
-void GameScene::RecordNewUnderBottom_blackRectIndex()
+void ZenGameScene::RecordNewUnderBottom_blackRectIndex()
 {
     if (1 == twoLineCount)
     {
         vector<int>::iterator iter = UnderBottom_bottom_blackRectIndexVec.begin();
         UnderBottom_bottom_blackRectIndexVec.erase(iter);
         UnderBottom_bottom_blackRectIndexVec.push_back(countSameLevelRectNum);
+    }
+}
+void ZenGameScene::update(float delta)
+{
+    timeNum-=0.001;
+    ostringstream oss;
+    oss<<timeNum;
+    string timeStr = oss.str();
+    timeStr = timeStr.substr(0,5);
+    timeStr = "'"+timeStr+"'";
+    const char * time = timeStr.c_str();
+    timeLabel->setString(time);
+    if(0 == timeNum && !isTouchLock)
+    {
+        auto scene =  GameOverScene::scene();
+        auto gameOverScene = (GameOverScene*)scene->getChildByTag(1001);
+        gameOverScene->setUpScene(Color4B(255,0,0,255),"禅","失败!",Zen_enum);
+        Director::getInstance()->replaceScene(scene);
     }
 }

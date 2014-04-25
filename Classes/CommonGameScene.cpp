@@ -242,7 +242,10 @@ void CommonGameScene::createFillRect()
 }
 void CommonGameScene::replaceCommonGameOverScene(Ref* sender, bool cleanup)
 {
-    Director::getInstance()->replaceScene( GameOverScene::scene() );
+    auto scene =  GameOverScene::scene();
+    auto gameOverScene = (GameOverScene*)scene->getChildByTag(1001);
+    gameOverScene->setUpScene(Color4B(0, 255, 0,255),"普通模式","失败!",Common_enum);
+    Director::getInstance()->replaceScene(scene);
 }
 void CommonGameScene::OneLinePass()
 {

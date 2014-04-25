@@ -27,5 +27,8 @@ const static float horizontalNum_macro = 4.0f;
 const static int totalLine_macro = 15;
 
 
+//ZenGameScene
+const static float totalTime_macro = 1.000f;
+
 #endif
 

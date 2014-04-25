@@ -44,6 +44,10 @@
 		26DD26001908DEB9007768B6 /* CommonGameColorButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DD25FB1908DEB9007768B6 /* CommonGameColorButton.cpp */; };
 		26DD26011908DEB9007768B6 /* CommonGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DD25FD1908DEB9007768B6 /* CommonGameScene.cpp */; };
 		26DD26021908DEB9007768B6 /* CommonGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DD25FD1908DEB9007768B6 /* CommonGameScene.cpp */; };
+		26DD26071908F79C007768B6 /* ZenGameColorButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DD26031908F79C007768B6 /* ZenGameColorButton.cpp */; };
+		26DD26081908F79C007768B6 /* ZenGameColorButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DD26031908F79C007768B6 /* ZenGameColorButton.cpp */; };
+		26DD26091908F79C007768B6 /* ZenGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DD26051908F79C007768B6 /* ZenGameScene.cpp */; };
+		26DD260A1908F79C007768B6 /* ZenGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DD26051908F79C007768B6 /* ZenGameScene.cpp */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 503AE0F617EB97AB00D1A890 /* Icon.icns */; };
 		503AE10017EB989F00D1A890 /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 503AE0FB17EB989F00D1A890 /* AppController.mm */; };
@@ -262,6 +266,10 @@
 		26DD25FC1908DEB9007768B6 /* CommonGameColorButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommonGameColorButton.h; path = ../Classes/CommonGameColorButton.h; sourceTree = "<group>"; };
 		26DD25FD1908DEB9007768B6 /* CommonGameScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CommonGameScene.cpp; path = ../Classes/CommonGameScene.cpp; sourceTree = "<group>"; };
 		26DD25FE1908DEB9007768B6 /* CommonGameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommonGameScene.h; path = ../Classes/CommonGameScene.h; sourceTree = "<group>"; };
+		26DD26031908F79C007768B6 /* ZenGameColorButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ZenGameColorButton.cpp; path = ../Classes/ZenGameColorButton.cpp; sourceTree = "<group>"; };
+		26DD26041908F79C007768B6 /* ZenGameColorButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZenGameColorButton.h; path = ../Classes/ZenGameColorButton.h; sourceTree = "<group>"; };
+		26DD26051908F79C007768B6 /* ZenGameScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ZenGameScene.cpp; path = ../Classes/ZenGameScene.cpp; sourceTree = "<group>"; };
+		26DD26061908F79C007768B6 /* ZenGameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZenGameScene.h; path = ../Classes/ZenGameScene.h; sourceTree = "<group>"; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		503AE0F617EB97AB00D1A890 /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Icon.icns; sourceTree = "<group>"; };
 		503AE0F717EB97AB00D1A890 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -371,6 +379,10 @@
 		15AA9C4015B7EC450033D6C2 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				26DD26031908F79C007768B6 /* ZenGameColorButton.cpp */,
+				26DD26041908F79C007768B6 /* ZenGameColorButton.h */,
+				26DD26051908F79C007768B6 /* ZenGameScene.cpp */,
+				26DD26061908F79C007768B6 /* ZenGameScene.h */,
 				26DD25FB1908DEB9007768B6 /* CommonGameColorButton.cpp */,
 				26DD25FC1908DEB9007768B6 /* CommonGameColorButton.h */,
 				26DD25FD1908DEB9007768B6 /* CommonGameScene.cpp */,
@@ -379,10 +391,10 @@
 				268458381907DE1400DEA831 /* AppDelegate.h */,
 				2684583D1907DE1400DEA831 /* GameOverScene.cpp */,
 				2684583E1907DE1400DEA831 /* GameOverScene.h */,
-				2684583B1907DE1400DEA831 /* GameColorButton.cpp */,
-				2684583C1907DE1400DEA831 /* GameColorButton.h */,
 				268458391907DE1400DEA831 /* ColorButton.cpp */,
 				2684583A1907DE1400DEA831 /* ColorButton.h */,
+				2684583B1907DE1400DEA831 /* GameColorButton.cpp */,
+				2684583C1907DE1400DEA831 /* GameColorButton.h */,
 				2684583F1907DE1400DEA831 /* GameScene.cpp */,
 				268458401907DE1400DEA831 /* GameScene.h */,
 				268458411907DE1400DEA831 /* HelloWorldScene.cpp */,
@@ -723,9 +735,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26DD26071908F79C007768B6 /* ZenGameColorButton.cpp in Sources */,
 				2684584C1907DE1400DEA831 /* GameOverScene.cpp in Sources */,
 				268458461907DE1400DEA831 /* AppDelegate.cpp in Sources */,
 				268458501907DE1400DEA831 /* HelloWorldScene.cpp in Sources */,
+				26DD26091908F79C007768B6 /* ZenGameScene.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				268458521907DE1400DEA831 /* VisibleRect.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
@@ -746,11 +760,13 @@
 				26DD26021908DEB9007768B6 /* CommonGameScene.cpp in Sources */,
 				2684584B1907DE1400DEA831 /* GameColorButton.cpp in Sources */,
 				268458511907DE1400DEA831 /* HelloWorldScene.cpp in Sources */,
+				26DD26081908F79C007768B6 /* ZenGameColorButton.cpp in Sources */,
 				26DD26001908DEB9007768B6 /* CommonGameColorButton.cpp in Sources */,
 				2684584D1907DE1400DEA831 /* GameOverScene.cpp in Sources */,
 				268458531907DE1400DEA831 /* VisibleRect.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
 				2684584F1907DE1400DEA831 /* GameScene.cpp in Sources */,
+				26DD260A1908F79C007768B6 /* ZenGameScene.cpp in Sources */,
 				268458491907DE1400DEA831 /* ColorButton.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

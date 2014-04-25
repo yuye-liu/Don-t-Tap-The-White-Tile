@@ -2,6 +2,7 @@
 #include "VisibleRect.h"
 #include "GameScene.h"
 #include "CommonGameScene.h"
+#include "ZenGameScene.h"
 
 ColorButton::ColorButton(void)
 {
@@ -74,7 +75,7 @@ bool ColorButton::onTouchBegan(Touch* touch, Event* event)
             Director::getInstance()->replaceScene( GameScene::scene() );
             break;
         case 2:
-            ;
+            Director::getInstance()->replaceScene( ZenGameScene::scene() );
             break;
         case 3:
             ;

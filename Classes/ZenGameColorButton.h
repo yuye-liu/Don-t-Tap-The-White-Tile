@@ -1,29 +1,29 @@
-#ifndef __CommonGameColorButton_H__
-#define __CommonGameColorButton_H__
+#ifndef __ZenGameColorButton_H__
+#define __ZenGameColorButton_H__
 
 #include "cocos2d.h"
 #include "VisibleRect.h"
 USING_NS_CC;
 
-class CommonGameScene;
-class CommonGameColorButton : public LayerGradient
+class ZenGameScene;
+class ZenGameColorButton : public LayerGradient
 {
 public:
     int isBlack;
     int myLevel;
     
-    static CommonGameColorButton* createWithColor(const Color4B& start, const Color4B& end);
-    void getCommonGameScenePoint(CommonGameScene * CommonGameScene);
+    static ZenGameColorButton* createWithColor(const Color4B& start, const Color4B& end);
+    void getZenGameScenePoint(ZenGameScene * ZenGameScene);
     
 protected:
     DrawNode* rectStroke;
-    CommonGameScene * aCommonGameScene;
+    ZenGameScene * aZenGameScene;
     
     const cocos2d::Size screenSize_macro = VisibleRect::getVisibleRect().size;
     const float screenHeight = VisibleRect::getVisibleRect().size.height;
     
-    CommonGameColorButton(void);
-    virtual ~CommonGameColorButton(void);
+    ZenGameColorButton(void);
+    virtual ~ZenGameColorButton(void);
     virtual void onEnter() override;
     virtual void onExit() override;
     
@@ -37,8 +37,7 @@ protected:
     DrawNode* createDrawNode( const Point& pos );
     void simulationActionUpdate();
     void update(float delta);
-    void replayCommonGameOverScene(Ref* sender, bool cleanup);
-    void replaceGameOverScene(float dt);
+    void replayZenGameOverScene(Ref* sender, bool cleanup);
     void clickBlack();
 };
 

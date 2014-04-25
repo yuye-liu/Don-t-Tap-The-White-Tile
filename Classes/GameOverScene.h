@@ -4,6 +4,14 @@
 #include "cocos2d.h"
 USING_NS_CC;
 
+enum sceneName
+{
+    Common_enum,
+    Zen_enum,
+    Street_enum,
+};
+
+
 class GameOverScene : public cocos2d::Layer
 {
 public:
@@ -12,10 +20,15 @@ public:
 
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
     virtual bool init();  
+    /*
+    std::string titleStr;
     
-    const char * titleStr = "经典模式";
+    std::string resultStr;
     
-    const char * resultStr = "败了!";
+    Color4B bgColor;
+    */
+    
+    int sceneState;
     
     LabelTTF * titleLabel;
     
@@ -27,7 +40,7 @@ public:
     
     MenuItemFont * replayItem;
     
-    
+    void setUpScene(Color4B bgColor,const char *titleStr,const char * resultStr,int Scene);
     void share(Ref* pSender);
     void back(Ref* pSender);
     void replay(Ref* pSender);

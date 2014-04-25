@@ -116,6 +116,8 @@ bool CommonGameColorButton::onTouchBegan(Touch* touch, Event* event)
             else
             {
                 aCommonGameScene->AllCommonGameColorButtonMoveBy(Point(0.0f,-this->getContentSize().height*2.5),0.5f,0.0f);
+                
+                this->schedule(schedule_selector(CommonGameColorButton::replaceGameOverScene), 0.5f, false, 0.0f);
             }
             
             clickBlack();
@@ -211,8 +213,14 @@ void CommonGameColorButton::clickBlack()
         aCommonGameScene->currentVerticalNum = verticalNum_macro-1;
     }
 }
-
 void CommonGameColorButton::getCommonGameScenePoint(CommonGameScene * CommonGameScene)
 {
     aCommonGameScene = CommonGameScene;
+}
+void CommonGameColorButton::replaceGameOverScene(float dt)
+{
+    auto scene =  GameOverScene::scene();
+    auto gameOverScene = (GameOverScene*)scene->getChildByTag(1001);
+    gameOverScene->setUpScene(Color4B(0, 255, 0,255),"普通模式","失败!",Common_enum);
+    Director::getInstance()->replaceScene(scene);
 }

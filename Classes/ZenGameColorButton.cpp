@@ -1,26 +1,26 @@
-#include "GameColorButton.h"
+#include "ZenGameColorButton.h"
 
 #include "GameOverScene.h"
 #include "Script.h"
 #include "SimpleAudioEngine.h"
-#include "GameScene.h"
+#include "ZenGameScene.h"
 #include <sstream>
 
 using namespace std;
-GameColorButton::GameColorButton(void)
+ZenGameColorButton::ZenGameColorButton(void)
 {
 }
-GameColorButton::~GameColorButton(void)
+ZenGameColorButton::~ZenGameColorButton(void)
 {
 }
-GameColorButton* GameColorButton::createWithColor(const Color4B& start, const Color4B& end)
+ZenGameColorButton* ZenGameColorButton::createWithColor(const Color4B& start, const Color4B& end)
 {
-    GameColorButton * layer = new GameColorButton();
+    ZenGameColorButton * layer = new ZenGameColorButton();
     layer->initWithColor(start, end);
     layer->autorelease();
     return layer;
 }
-bool GameColorButton::initWithColor(const Color4B& start, const Color4B& end)
+bool ZenGameColorButton::initWithColor(const Color4B& start, const Color4B& end)
 {
     if( LayerGradient::initWithColor(start, end) )
     {
@@ -29,7 +29,7 @@ bool GameColorButton::initWithColor(const Color4B& start, const Color4B& end)
     
     return false;
 }
-void GameColorButton::onEnter()
+void ZenGameColorButton::onEnter()
 {
     LayerGradient::onEnter();
     
@@ -37,9 +37,9 @@ void GameColorButton::onEnter()
     auto listener = EventListenerTouchOneByOne::create();
     listener->setSwallowTouches(true);
     
-    listener->onTouchBegan = CC_CALLBACK_2(GameColorButton::onTouchBegan, this);
-    listener->onTouchMoved = CC_CALLBACK_2(GameColorButton::onTouchMoved, this);
-    listener->onTouchEnded = CC_CALLBACK_2(GameColorButton::onTouchEnded, this);
+    listener->onTouchBegan = CC_CALLBACK_2(ZenGameColorButton::onTouchBegan, this);
+    listener->onTouchMoved = CC_CALLBACK_2(ZenGameColorButton::onTouchMoved, this);
+    listener->onTouchEnded = CC_CALLBACK_2(ZenGameColorButton::onTouchEnded, this);
     
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     rectStroke = createDrawNode( Point(0.0f,getRect().size.height));
@@ -59,43 +59,37 @@ void GameColorButton::onEnter()
     this->addChild(label, 1);
 }
 
-void GameColorButton::onExit()
+void ZenGameColorButton::onExit()
 {
     LayerGradient::onExit();
 }
-bool GameColorButton::containsTouchLocation(Touch* touch)
+bool ZenGameColorButton::containsTouchLocation(Touch* touch)
 {
     return getRect().containsPoint(convertTouchToNodeSpaceAR(touch));
 }
-Rect GameColorButton::getRect()
+Rect ZenGameColorButton::getRect()
 {
     auto s = getContentSize();
     return Rect(0, -s.height, s.width, s.height);
 }
 
-bool GameColorButton::onTouchBegan(Touch* touch, Event* event)
+bool ZenGameColorButton::onTouchBegan(Touch* touch, Event* event)
 {
     if ( !containsTouchLocation(touch) )return false;
-    
-    if (aGameScene->isFirstIn)
+    if (aZenGameScene->isTouchLock)
     {
-        aGameScene->isFirstIn = false;
-        aGameScene->AllGameColorButtonMoveBy(Point(0,-VisibleRect::getVisibleRect().size.height*2),rectScrollSpeed_macro,0.0f);
         return false;
     }
     if(2 == isBlack)
     {
         return false;
     }
-    if (aGameScene->isTouchLock)
-    {
-        return false;
-    }
+    
     if(0 == isBlack)
     {
-        aGameScene->isTouchLock=true;
+        aZenGameScene->isTouchLock=true;
         CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(clickWhiteEffect_macro );
-        CallFuncN * callFuncN = CallFuncN::create( CC_CALLBACK_1(GameColorButton::replayGameOverScene, this, true));
+        CallFuncN * callFuncN = CallFuncN::create( CC_CALLBACK_1(ZenGameColorButton::replayZenGameOverScene, this, true));
         
         TintBy * tint = TintBy::create(0.3f, 240, 650, 85);
         auto reverse = tint->reverse();
@@ -103,31 +97,34 @@ bool GameColorButton::onTouchBegan(Touch* touch, Event* event)
     }
     else
     {
-        if(getTag() != aGameScene->blackRectTagVec[0])
+        if(getTag() != aZenGameScene->blackRectTagVec[0])
         {
-            aGameScene->gameOver2();
+            return false;
         }
         else
         {
             CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(clickBlackEffect_macro );
-            CallFuncN * callFuncN = CallFuncN::create( CC_CALLBACK_1(GameColorButton::clickBlack, this, true));
             
-            TintBy * tint = TintBy::create(0.3f, 192, 192, 192);
-            runAction(Sequence::create(tint,callFuncN,NULL));
+            setStartColor(Color3B(192, 192, 192));
+            setEndColor(Color3B(192, 192, 192));
+            
+            aZenGameScene->ZenGameTotalLine ++;
+             aZenGameScene->AllZenGameColorButtonMoveBy(Point(0.0f,-this->getContentSize().height),0.5f,0.0f);
+            clickBlack();
         }
     }
     return true;
 }
-void GameColorButton::onTouchMoved(Touch* touch, Event* event)
+void ZenGameColorButton::onTouchMoved(Touch* touch, Event* event)
 {
 
 }
-void GameColorButton::onTouchEnded(Touch* touch, Event* event)
+void ZenGameColorButton::onTouchEnded(Touch* touch, Event* event)
 {
 
 }
 
-DrawNode* GameColorButton::createDrawNode( const Point& pos )
+DrawNode* ZenGameColorButton::createDrawNode( const Point& pos )
 {
     auto drawNode = DrawNode::create();
     float width = getRect().size.width;
@@ -148,43 +145,37 @@ DrawNode* GameColorButton::createDrawNode( const Point& pos )
     this->addChild(drawNode);
     return drawNode;
 }
-void GameColorButton::simulationActionUpdate()
+void ZenGameColorButton::simulationActionUpdate()
 {
     
 }
-void GameColorButton::update(float delta)
+
+void ZenGameColorButton::update(float delta)
 {
     if(getPositionY()<VisibleRect::bottom().y)
     {
-        if (getTag() == aGameScene->blackRectTagVec[0])
-        {
-            aGameScene->gameOver2();
-            return;
-        }
-        
         setPosition(Point(getPositionX(),VisibleRect::top().y+screenHeight/4));
-        stopAllActions();
-        if(GameScene::getRandomNumber(0,1) == 0 && !aGameScene->isSettedWhiteRect)
+        if(ZenGameScene::getRandomNumber(0,1) == 0 && !aZenGameScene->isSettedWhiteRect)
         {
             setStartColor(Color3B(0.0f,0.0f,0.0f));
             setEndColor(Color3B(0.0f,0.0f,0.0f));
-            aGameScene->isSettedWhiteRect = true;
+            aZenGameScene->isSettedWhiteRect = true;
 
-            aGameScene->blackRectTagVec.push_back(getTag());
+            aZenGameScene->blackRectTagVec.push_back(getTag());
             isBlack = 1;
-            aGameScene->RecordNewUnderBottom_blackRectIndex();
+            aZenGameScene->RecordNewUnderBottom_blackRectIndex();
         }
         else
         {
-            if(3 == aGameScene->countSameLevelRectNum && !aGameScene->isSettedWhiteRect)
+            if(3 == aZenGameScene->countSameLevelRectNum && !aZenGameScene->isSettedWhiteRect)
             {
                 setStartColor(Color3B(0.0f,0.0f,0.0f));
                 setEndColor(Color3B(0.0f,0.0f,0.0f));
-                aGameScene->isSettedWhiteRect = true;
+                aZenGameScene->isSettedWhiteRect = true;
                 
-                aGameScene->blackRectTagVec.push_back(getTag());
+                aZenGameScene->blackRectTagVec.push_back(getTag());
                 isBlack = 1;
-                aGameScene->RecordNewUnderBottom_blackRectIndex();
+                aZenGameScene->RecordNewUnderBottom_blackRectIndex();
             }
             else
             {
@@ -194,31 +185,29 @@ void GameColorButton::update(float delta)
             }
         }
         
-        aGameScene->OneLinePass();
-                
-        Action * MoveBy = MoveBy::create(rectScrollSpeed_macro, Point(0,-screenHeight*2));
-        this->runAction(MoveBy);
+        aZenGameScene->OneLinePass();
     }
 }
-void GameColorButton::replayGameOverScene(Ref* sender, bool cleanup)
+void ZenGameColorButton::replayZenGameOverScene(Ref* sender, bool cleanup)
 {
     auto scene =  GameOverScene::scene();
     auto gameOverScene = (GameOverScene*)scene->getChildByTag(1001);
-    gameOverScene->setUpScene(Color4B(255,0,0,255),"街机模式","失败!",Street_enum);
+    gameOverScene->setUpScene(Color4B(255,0,0,255),"禅","失败!",Zen_enum);
     Director::getInstance()->replaceScene(scene);
 }
-void GameColorButton::clickBlack(Ref* sender, bool cleanup)
+void ZenGameColorButton::clickBlack()
 {
-    vector<int>::iterator iter = aGameScene->blackRectTagVec.begin();
-    aGameScene->blackRectTagVec.erase(iter);
+    vector<int>::iterator iter = aZenGameScene->blackRectTagVec.begin();
+    aZenGameScene->blackRectTagVec.erase(iter);
   
-    aGameScene->currentVerticalNum--;
-    if(aGameScene->currentVerticalNum<0)
+    aZenGameScene->currentVerticalNum--;
+    if(aZenGameScene->currentVerticalNum<0)
     {
-        aGameScene->currentVerticalNum = verticalNum_macro-1;
+        aZenGameScene->currentVerticalNum = verticalNum_macro-1;
     }
 }
-void GameColorButton::getGameScenePoint(GameScene * gameScene)
+
+void ZenGameColorButton::getZenGameScenePoint(ZenGameScene * ZenGameScene)
 {
-    aGameScene = gameScene;
+    aZenGameScene = ZenGameScene;
 }
