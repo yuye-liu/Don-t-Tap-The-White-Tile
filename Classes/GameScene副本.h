@@ -19,15 +19,14 @@ public:
     std::vector<int > UnderBottom_bottom_blackRectIndexVec;
     int twoLineCount = 0;
     bool isFirstIn = true;
-    bool stopAllRectAction = false;
     
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
     static cocos2d::Scene* scene();
     CREATE_FUNC(GameScene);
     
+    static std::vector<int > getRandomVect(int start,int end);
     static int getRandomNumber(int start,int end);
     void AllGameColorButtonMoveBy(const Point& MoveByD,float duration,float rate);
-    void loopRoll(Ref* sender, bool cleanup);
     void stopAllGameColorButtonSchedule();
     void gameOver2();
     void createFillRect();

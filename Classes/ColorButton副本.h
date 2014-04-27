@@ -16,9 +16,9 @@ public:
    
     bool containsTouchLocation(Touch* touch);
     Rect getRect();
-    virtual bool onTouchBegan(Touch* touch, Event* event);
-    virtual void onTouchMoved(Touch* touch, Event* event);
-    virtual void onTouchEnded(Touch* touch, Event* event);
+    bool onTouchBegan(Touch* touch, Event* event);
+    void onTouchMoved(Touch* touch, Event* event);
+    void onTouchEnded(Touch* touch, Event* event);
     
     static ColorButton* createWithColor(const Color4B& start, const Color4B& end);
 };

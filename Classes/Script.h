@@ -19,7 +19,7 @@ const static float  smallTitleSize_macro = 15.0f;
 #define clickBlackEffect_macro "touch.m4a"
 #define clickWhiteEffect_macro "error.m4a"
 
-const static float rectScrollSpeed_macro = 15.0f;
+const static float rectScrollSpeed_macro = 0.4f;
 const static float verticalNum_macro = 5.0f;
 const static float horizontalNum_macro = 4.0f;
 

@@ -26,7 +26,6 @@ bool GameColorButton::initWithColor(const Color4B& start, const Color4B& end)
     {
         return true;
     }
-    
     return false;
 }
 void GameColorButton::onEnter()
@@ -43,7 +42,6 @@ void GameColorButton::onEnter()
     
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     rectStroke = createDrawNode( Point(0.0f,getRect().size.height));
-    scheduleUpdate();
    
     ostringstream oss;
     oss<<myLevel;
@@ -79,8 +77,10 @@ bool GameColorButton::onTouchBegan(Touch* touch, Event* event)
     
     if (aGameScene->isFirstIn)
     {
+        aGameScene->AllGameColorButtonMoveBy(Point(0,-VisibleRect::getVisibleRect().size.height/4),rectScrollSpeed_macro,0.0f);
+        
         aGameScene->isFirstIn = false;
-        aGameScene->AllGameColorButtonMoveBy(Point(0,-VisibleRect::getVisibleRect().size.height*2),rectScrollSpeed_macro,0.0f);
+        
         return false;
     }
     if(2 == isBlack)
@@ -110,21 +110,10 @@ bool GameColorButton::onTouchBegan(Touch* touch, Event* event)
         else
         {
             CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(clickBlackEffect_macro );
-            CallFuncN * callFuncN = CallFuncN::create( CC_CALLBACK_1(GameColorButton::clickBlack, this, true));
-            
-            TintBy * tint = TintBy::create(0.3f, 192, 192, 192);
-            runAction(Sequence::create(tint,callFuncN,NULL));
+            clickBlack();
         }
     }
     return true;
-}
-void GameColorButton::onTouchMoved(Touch* touch, Event* event)
-{
-
-}
-void GameColorButton::onTouchEnded(Touch* touch, Event* event)
-{
-
 }
 
 DrawNode* GameColorButton::createDrawNode( const Point& pos )
@@ -148,58 +137,6 @@ DrawNode* GameColorButton::createDrawNode( const Point& pos )
     this->addChild(drawNode);
     return drawNode;
 }
-void GameColorButton::simulationActionUpdate()
-{
-    
-}
-void GameColorButton::update(float delta)
-{
-    if(getPositionY()<VisibleRect::bottom().y)
-    {
-        if (getTag() == aGameScene->blackRectTagVec[0])
-        {
-            aGameScene->gameOver2();
-            return;
-        }
-        
-        setPosition(Point(getPositionX(),VisibleRect::top().y+screenHeight/4));
-        stopAllActions();
-        if(GameScene::getRandomNumber(0,1) == 0 && !aGameScene->isSettedWhiteRect)
-        {
-            setStartColor(Color3B(0.0f,0.0f,0.0f));
-            setEndColor(Color3B(0.0f,0.0f,0.0f));
-            aGameScene->isSettedWhiteRect = true;
-
-            aGameScene->blackRectTagVec.push_back(getTag());
-            isBlack = 1;
-            aGameScene->RecordNewUnderBottom_blackRectIndex();
-        }
-        else
-        {
-            if(3 == aGameScene->countSameLevelRectNum && !aGameScene->isSettedWhiteRect)
-            {
-                setStartColor(Color3B(0.0f,0.0f,0.0f));
-                setEndColor(Color3B(0.0f,0.0f,0.0f));
-                aGameScene->isSettedWhiteRect = true;
-                
-                aGameScene->blackRectTagVec.push_back(getTag());
-                isBlack = 1;
-                aGameScene->RecordNewUnderBottom_blackRectIndex();
-            }
-            else
-            {
-            setStartColor(Color3B(255.0f,255.0f,255.0f));
-            setEndColor(Color3B(255.0f,255.0f,255.0f));
-            isBlack = 0;
-            }
-        }
-        
-        aGameScene->OneLinePass();
-                
-        Action * MoveBy = MoveBy::create(rectScrollSpeed_macro, Point(0,-screenHeight*2));
-        this->runAction(MoveBy);
-    }
-}
 void GameColorButton::replayGameOverScene(Ref* sender, bool cleanup)
 {
     auto scene =  GameOverScene::scene();
@@ -207,8 +144,11 @@ void GameColorButton::replayGameOverScene(Ref* sender, bool cleanup)
     gameOverScene->setUpScene(Color4B(255,0,0,255),"街机模式","失败!",Street_enum);
     Director::getInstance()->replaceScene(scene);
 }
-void GameColorButton::clickBlack(Ref* sender, bool cleanup)
+void GameColorButton::clickBlack()
 {
+    setStartColor(Color3B(192, 192, 192));
+    setEndColor(Color3B(192, 192, 192));
+
     vector<int>::iterator iter = aGameScene->blackRectTagVec.begin();
     aGameScene->blackRectTagVec.erase(iter);
   

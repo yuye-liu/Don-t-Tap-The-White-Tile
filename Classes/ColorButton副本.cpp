@@ -84,6 +84,15 @@ bool ColorButton::onTouchBegan(Touch* touch, Event* event)
         default:
             break;
     }
+  /*
+    auto scene = new GameScene();
+    auto layer = Layer::create();
+    scene->addChild( layer, 0 );
+    Director::getInstance()->replaceScene(TransitionFlipX::create(2, scene) );
+    scene->release();
+    */
+    
+    
     return true;
 }
 void ColorButton::onTouchMoved(Touch* touch, Event* event)

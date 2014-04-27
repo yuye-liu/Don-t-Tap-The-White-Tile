@@ -32,13 +32,9 @@ protected:
     bool containsTouchLocation(Touch* touch);
     Rect getRect();
     bool onTouchBegan(Touch* touch, Event* event);
-    void onTouchMoved(Touch* touch, Event* event);
-    void onTouchEnded(Touch* touch, Event* event);
     DrawNode* createDrawNode( const Point& pos );
-    void simulationActionUpdate();
-    void update(float delta);
     void replayGameOverScene(Ref* sender, bool cleanup);
-    void clickBlack(Ref* sender, bool cleanup);
+    void clickBlack();
 };
 
 #endif // __HELLOWORLD_SCENE_H__
