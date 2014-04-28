@@ -144,7 +144,14 @@ void GameScene::loopRoll(Ref* sender, bool cleanup)
             gameOver2();
             return;
         }
-        gameColorButton->setPosition(Point(gameColorButton->getPositionX(),VisibleRect::top().y+gameColorButton->getContentSize().height));
+        int topLine = bottomLineVerticalNum+1;
+        if (topLine>4)
+        {
+            topLine = 0;
+        }
+        GameColorButton * topButton = (GameColorButton * )getChildByTag(topLine*4);
+        
+        gameColorButton->setPosition(Point(gameColorButton->getPositionX(),topButton->getPosition().y+gameColorButton->getContentSize().height));
         
         if(GameScene::getRandomNumber(0,1) == 0 && !isSettedWhiteRect)
         {
@@ -184,14 +191,6 @@ void GameScene::loopRoll(Ref* sender, bool cleanup)
 void GameScene::stopAllGameColorButtonSchedule()
 {
     stopAllRectAction = true;
-    /*
-    for(int i = 0;i<totalVhertical*horizontalNum_macro;i++)
-    {
-        GameColorButton * obj = (GameColorButton * )getChildByTag(i);
-        obj->stopAllActions();
-        obj->unscheduleAllSelectors();
-    }
-     */
 }
 void GameScene::gameOver2()
 {
