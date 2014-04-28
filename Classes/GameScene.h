@@ -11,7 +11,6 @@ class GameScene : public cocos2d::Layer
 public:
     int currentVerticalNum = 4;
     int bottomLineVerticalNum = verticalNum_macro-1;
-    int countSameLevelRectNum = 0;
     bool isSettedWhiteRect = false;
     int  missedGameColorButtonTag;
     bool isTouchLock = false;
@@ -33,7 +32,7 @@ public:
     void createFillRect();
     void replaceGameOverScene(Ref* sender, bool cleanup);
     void OneLinePass();
-    void RecordNewUnderBottom_blackRectIndex();
+    void RecordNewUnderBottom_blackRectIndex(int whiteIdx);
     
 protected:
     int totalHorizontal = horizontalNum_macro;

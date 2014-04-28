@@ -161,11 +161,11 @@ void GameScene::loopRoll(Ref* sender, bool cleanup)
             
             blackRectTagVec.push_back(gameColorButton->getTag());
             gameColorButton->isBlack = 1;
-            RecordNewUnderBottom_blackRectIndex();
+            RecordNewUnderBottom_blackRectIndex(i);
         }
         else
         {
-            if(3 == countSameLevelRectNum && !isSettedWhiteRect)
+            if(!isSettedWhiteRect)
             {
                 gameColorButton->setStartColor(Color3B(0.0f,0.0f,0.0f));
                 gameColorButton->setEndColor(Color3B(0.0f,0.0f,0.0f));
@@ -173,7 +173,7 @@ void GameScene::loopRoll(Ref* sender, bool cleanup)
                 
                 blackRectTagVec.push_back(gameColorButton->getTag());
                 gameColorButton->isBlack = 1;
-                RecordNewUnderBottom_blackRectIndex();
+                RecordNewUnderBottom_blackRectIndex(i);
             }
             else
             {
@@ -257,7 +257,6 @@ void GameScene::replaceGameOverScene(Ref* sender, bool cleanup)
 void GameScene::OneLinePass()
 {
     isSettedWhiteRect = false;
-    countSameLevelRectNum = 0;
     
     bottomLineVerticalNum--;
     if (bottomLineVerticalNum<0)
@@ -271,12 +270,12 @@ void GameScene::OneLinePass()
         twoLineCount = 0;
     }
 }
-void GameScene::RecordNewUnderBottom_blackRectIndex()
+void GameScene::RecordNewUnderBottom_blackRectIndex(int whiteIdx)
 {
     if (1 == twoLineCount)
     {
         vector<int>::iterator iter = UnderBottom_bottom_blackRectIndexVec.begin();
         UnderBottom_bottom_blackRectIndexVec.erase(iter);
-        UnderBottom_bottom_blackRectIndexVec.push_back(countSameLevelRectNum);
+        UnderBottom_bottom_blackRectIndexVec.push_back(whiteIdx);
     }
 }

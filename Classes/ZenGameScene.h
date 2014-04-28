@@ -11,7 +11,6 @@ class ZenGameScene : public cocos2d::Layer
 public:
     int currentVerticalNum = 4;
     int bottomLineVerticalNum = verticalNum_macro-1;
-    int countSameLevelRectNum = 0;
     bool isSettedWhiteRect = false;
     int  missedZenGameColorButtonTag;
     bool isTouchLock = false;
@@ -27,15 +26,15 @@ public:
     static cocos2d::Scene* scene();
     CREATE_FUNC(ZenGameScene);
     
-    static std::vector<int > getRandomVect(int start,int end);
     static int getRandomNumber(int start,int end);
     void AllZenGameColorButtonMoveBy(const Point& MoveByD,float duration,float rate);
+    void loopRoll(Ref* sender, bool cleanup);
     void stopAllZenGameColorButtonSchedule();
     void ZenGameOver2();
     void createFillRect();
     void replaceZenGameOverScene(Ref* sender, bool cleanup);
     void OneLinePass();
-    void RecordNewUnderBottom_blackRectIndex();
+    void RecordNewUnderBottom_blackRectIndex(int whiteIdx);
     
 protected:
     int totalHorizontal = horizontalNum_macro;

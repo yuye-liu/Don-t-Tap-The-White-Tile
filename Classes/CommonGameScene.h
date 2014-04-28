@@ -11,7 +11,6 @@ class CommonGameScene : public cocos2d::Layer
 public:
     int currentVerticalNum = 4;
     int bottomLineVerticalNum = verticalNum_macro-1;
-    int countSameLevelRectNum = 0;
     bool isSettedWhiteRect = false;
     int  missedCommonGameColorButtonTag;
     bool isTouchLock = false;
@@ -27,15 +26,15 @@ public:
     static cocos2d::Scene* scene();
     CREATE_FUNC(CommonGameScene);
     
-    static std::vector<int > getRandomVect(int start,int end);
     static int getRandomNumber(int start,int end);
     void AllCommonGameColorButtonMoveBy(const Point& MoveByD,float duration,float rate);
+    void loopRoll(Ref* sender, bool cleanup);
     void stopAllCommonGameColorButtonSchedule();
     void CommonGameOver2();
     void createFillRect();
     void replaceCommonGameOverScene(Ref* sender, bool cleanup);
     void OneLinePass();
-    void RecordNewUnderBottom_blackRectIndex();
+    void RecordNewUnderBottom_blackRectIndex(int whiteIdx);
     
 protected:
     int totalHorizontal = horizontalNum_macro;

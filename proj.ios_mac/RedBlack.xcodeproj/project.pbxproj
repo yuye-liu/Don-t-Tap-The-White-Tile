@@ -379,6 +379,8 @@
 		15AA9C4015B7EC450033D6C2 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				268458371907DE1400DEA831 /* AppDelegate.cpp */,
+				268458381907DE1400DEA831 /* AppDelegate.h */,
 				26DD26031908F79C007768B6 /* ZenGameColorButton.cpp */,
 				26DD26041908F79C007768B6 /* ZenGameColorButton.h */,
 				26DD26051908F79C007768B6 /* ZenGameScene.cpp */,
@@ -387,8 +389,6 @@
 				26DD25FC1908DEB9007768B6 /* CommonGameColorButton.h */,
 				26DD25FD1908DEB9007768B6 /* CommonGameScene.cpp */,
 				26DD25FE1908DEB9007768B6 /* CommonGameScene.h */,
-				268458371907DE1400DEA831 /* AppDelegate.cpp */,
-				268458381907DE1400DEA831 /* AppDelegate.h */,
 				2684583D1907DE1400DEA831 /* GameOverScene.cpp */,
 				2684583E1907DE1400DEA831 /* GameOverScene.h */,
 				2684583B1907DE1400DEA831 /* GameColorButton.cpp */,

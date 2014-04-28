@@ -119,41 +119,7 @@ CommonGameColorButton*  CommonGameScene::createRect(Color4B color4B,int horizont
     
     return layer;
 }
-vector<int > CommonGameScene::getRandomVect(int start,int end)
-{
-    vector<int > randomVect;
-    
-    int quantity = 12;
-    int total = abs(end - start);
-    if (quantity >total)
-    {
-        log("随机数错误");
-    }
-    int sequence[total];  //存放随机数的数组
-    int output[quantity]; //最终生成的不重复一系列随机数
-    
-    //将sequence 初始化
-    for (int i = 0; i < total; i++)
-    {
-        sequence[i] = start+i;
-    }
-    //随机数种子
-    timeval psv;
-    gettimeofday(&psv, NULL);
-    unsigned long int seed = psv.tv_sec*1000 + psv.tv_usec/1000;
-    srand(seed);
-    
-    for (int i = 0; i < quantity; i++)
-    {
-        int num = CommonGameScene::getRandomNumber(0, end - 1);//在指定范围下产生随机数
-        output[i] = sequence[num];//将产生的随机数存储
-        randomVect[i] = sequence[num];
-        sequence[num] = sequence[end-1];//将最后个下标的值填充到随机产生的下标中
-        end--;//在指定范围 向前移
-    }
-    
-    return randomVect;
-}
+
 int CommonGameScene::getRandomNumber(int start,int end)
 {
     return CCRANDOM_0_1()*(end+1-start)+start;
@@ -174,6 +140,57 @@ void CommonGameScene::AllCommonGameColorButtonMoveBy(const Point& MoveByD,float 
             EaseIn * easeIn = EaseIn::create(moveByD, rate);
             obj->runAction(easeIn);
         }
+    }
+    CallFuncN * callFuncN = CallFuncN::create( CC_CALLBACK_1(CommonGameScene::loopRoll, this, true));
+    runAction(Sequence::create(DelayTime::create(rectScrollSpeed_macro),callFuncN,NULL));
+}
+void CommonGameScene::loopRoll(Ref* sender, bool cleanup)
+{
+    if(0<commonGameTotalLine)
+    {
+        for(int i = 0;i<4;i++)
+        {
+            CommonGameColorButton * gameColorButton = (CommonGameColorButton * )getChildByTag(bottomLineVerticalNum*4+i);
+            
+            int topLine = bottomLineVerticalNum+1;
+            if (topLine>4)
+            {
+                topLine = 0;
+            }
+            CommonGameColorButton * topButton = (CommonGameColorButton * )getChildByTag(topLine*4);
+            
+            gameColorButton->setPosition(Point(gameColorButton->getPositionX(),topButton->getPosition().y+gameColorButton->getContentSize().height));
+            if(CommonGameScene::getRandomNumber(0,1) == 0 && !isSettedWhiteRect)
+            {
+                gameColorButton->setStartColor(Color3B(0.0f,0.0f,0.0f));
+                gameColorButton->setEndColor(Color3B(0.0f,0.0f,0.0f));
+                isSettedWhiteRect = true;
+                
+                blackRectTagVec.push_back(gameColorButton->getTag());
+                gameColorButton->isBlack = 1;
+                RecordNewUnderBottom_blackRectIndex(i);
+            }
+            else
+            {
+                if(!isSettedWhiteRect)
+                {
+                    gameColorButton->setStartColor(Color3B(0.0f,0.0f,0.0f));
+                    gameColorButton->setEndColor(Color3B(0.0f,0.0f,0.0f));
+                    isSettedWhiteRect = true;
+                    
+                    blackRectTagVec.push_back(gameColorButton->getTag());
+                    gameColorButton->isBlack = 1;
+                    RecordNewUnderBottom_blackRectIndex(i);
+                }
+                else
+                {
+                    gameColorButton->setStartColor(Color3B(255.0f,255.0f,255.0f));
+                    gameColorButton->setEndColor(Color3B(255.0f,255.0f,255.0f));
+                    gameColorButton->isBlack = 0;
+                }
+            }
+        }
+        OneLinePass();
     }
 }
 void CommonGameScene::stopAllCommonGameColorButtonSchedule()
@@ -249,33 +266,27 @@ void CommonGameScene::replaceCommonGameOverScene(Ref* sender, bool cleanup)
 }
 void CommonGameScene::OneLinePass()
 {
-    countSameLevelRectNum++;
-    if(countSameLevelRectNum>3)
+    isSettedWhiteRect = false;
+    
+    bottomLineVerticalNum--;
+    if (bottomLineVerticalNum<0)
     {
-        
-        isSettedWhiteRect = false;
-        countSameLevelRectNum = 0;
-        
-        bottomLineVerticalNum--;
-        if (bottomLineVerticalNum<0)
-        {
-            bottomLineVerticalNum = totalVhertical-1;
-        }
-        
-        twoLineCount++;
-        if(twoLineCount>1)
-        {
-            twoLineCount = 0;
-        }
+        bottomLineVerticalNum = totalVhertical-1;
+    }
+    
+    twoLineCount++;
+    if(twoLineCount>1)
+    {
+        twoLineCount = 0;
     }
 }
-void CommonGameScene::RecordNewUnderBottom_blackRectIndex()
+void CommonGameScene::RecordNewUnderBottom_blackRectIndex(int whiteIdx)
 {
     if (1 == twoLineCount)
     {
         vector<int>::iterator iter = UnderBottom_bottom_blackRectIndexVec.begin();
         UnderBottom_bottom_blackRectIndexVec.erase(iter);
-        UnderBottom_bottom_blackRectIndexVec.push_back(countSameLevelRectNum);
+        UnderBottom_bottom_blackRectIndexVec.push_back(whiteIdx);
     }
 }
 void CommonGameScene::update(float delta)

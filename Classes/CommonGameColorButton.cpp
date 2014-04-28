@@ -43,7 +43,7 @@ void CommonGameColorButton::onEnter()
     
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     rectStroke = createDrawNode( Point(0.0f,getRect().size.height));
-    scheduleUpdate();
+    //scheduleUpdate();
    
     ostringstream oss;
     oss<<myLevel;
@@ -155,49 +155,7 @@ DrawNode* CommonGameColorButton::createDrawNode( const Point& pos )
     this->addChild(drawNode);
     return drawNode;
 }
-void CommonGameColorButton::simulationActionUpdate()
-{
-    
-}
 
-void CommonGameColorButton::update(float delta)
-{
-    if(getPositionY()<VisibleRect::bottom().y && 0<aCommonGameScene->commonGameTotalLine)
-    {
-        setPosition(Point(getPositionX(),VisibleRect::top().y+screenHeight/4));
-        if(CommonGameScene::getRandomNumber(0,1) == 0 && !aCommonGameScene->isSettedWhiteRect)
-        {
-            setStartColor(Color3B(0.0f,0.0f,0.0f));
-            setEndColor(Color3B(0.0f,0.0f,0.0f));
-            aCommonGameScene->isSettedWhiteRect = true;
-
-            aCommonGameScene->blackRectTagVec.push_back(getTag());
-            isBlack = 1;
-            aCommonGameScene->RecordNewUnderBottom_blackRectIndex();
-        }
-        else
-        {
-            if(3 == aCommonGameScene->countSameLevelRectNum && !aCommonGameScene->isSettedWhiteRect)
-            {
-                setStartColor(Color3B(0.0f,0.0f,0.0f));
-                setEndColor(Color3B(0.0f,0.0f,0.0f));
-                aCommonGameScene->isSettedWhiteRect = true;
-                
-                aCommonGameScene->blackRectTagVec.push_back(getTag());
-                isBlack = 1;
-                aCommonGameScene->RecordNewUnderBottom_blackRectIndex();
-            }
-            else
-            {
-            setStartColor(Color3B(255.0f,255.0f,255.0f));
-            setEndColor(Color3B(255.0f,255.0f,255.0f));
-            isBlack = 0;
-            }
-        }
-        
-        aCommonGameScene->OneLinePass();
-    }
-}
 void CommonGameColorButton::replayCommonGameOverScene(Ref* sender, bool cleanup)
 {
     Director::getInstance()->replaceScene( GameOverScene::scene() );

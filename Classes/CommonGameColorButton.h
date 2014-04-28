@@ -35,8 +35,7 @@ protected:
     void onTouchMoved(Touch* touch, Event* event);
     void onTouchEnded(Touch* touch, Event* event);
     DrawNode* createDrawNode( const Point& pos );
-    void simulationActionUpdate();
-    void update(float delta);
+
     void replayCommonGameOverScene(Ref* sender, bool cleanup);
     void replaceGameOverScene(float dt);
     void clickBlack();

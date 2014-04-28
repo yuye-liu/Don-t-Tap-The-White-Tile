@@ -43,7 +43,7 @@ void ZenGameColorButton::onEnter()
     
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     rectStroke = createDrawNode( Point(0.0f,getRect().size.height));
-    scheduleUpdate();
+    //scheduleUpdate();
    
     ostringstream oss;
     oss<<myLevel;
@@ -145,11 +145,7 @@ DrawNode* ZenGameColorButton::createDrawNode( const Point& pos )
     this->addChild(drawNode);
     return drawNode;
 }
-void ZenGameColorButton::simulationActionUpdate()
-{
-    
-}
-
+/*
 void ZenGameColorButton::update(float delta)
 {
     if(getPositionY()<VisibleRect::bottom().y)
@@ -188,6 +184,7 @@ void ZenGameColorButton::update(float delta)
         aZenGameScene->OneLinePass();
     }
 }
+ */
 void ZenGameColorButton::replayZenGameOverScene(Ref* sender, bool cleanup)
 {
     auto scene =  GameOverScene::scene();
